@@ -6,6 +6,11 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     defaultConfig {
         applicationId "com.example.run"
         minSdkVersion 17
@@ -13,6 +18,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -35,6 +44,7 @@ dependencies {
     //androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation 'com.android.support:multidex:1.0.3'
     //bomb
     implementation 'cn.bmob.android:bmob-sdk:3.7.8'
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"

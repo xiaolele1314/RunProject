@@ -48,13 +48,15 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.CheckActivity"></activity>
+        <activity android:name=".activity.HomeActivity"></activity>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"

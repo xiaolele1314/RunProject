@@ -2,6 +2,8 @@ package com.example.run.app;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDex;
+
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.xuexiang.xui.XUI;
@@ -27,5 +29,6 @@ public class App extends Application {
         //设置坐标类型
         SDKInitializer.setCoordType(CoordType.BD09LL);
 
+        MultiDex.install(this);
     }
 }
