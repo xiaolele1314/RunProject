@@ -9,7 +9,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme1" parent="XUITheme.Phone">
+    <style name="AppTheme_me" parent="XUITheme.Phone">
 
     </style>
 

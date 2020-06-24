@@ -44,21 +44,32 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
 
     private MiniLoadingDialog miniLoadingDialog;
 
+    private Boolean isSend = true;
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            if(msg.what == 1){
-                btSend.setEnabled(true);
-                btSend.setText("重新发送");
-                btSend.setBackgroundColor(ActivityCompat.getColor(CheckActivity.this,R.color.main_blue));
-            }else{
-                count--;
-                btSend.setText(count + "s");
-                handler.sendEmptyMessageDelayed(count,1000);
+            if(isSend){
+                if(msg.what == 1){
+                    //一分钟内验证验证码未成功
+                    btSend.setEnabled(true);
+                    btSend.setText("重新发送");
+                    btSend.setBackgroundColor(ActivityCompat.getColor(CheckActivity.this,R.color.main_blue));
+                    isSend = false;
+                    count = 60;
+                }else{
+                    //设置60s倒计时
+                    count--;
+                    btSend.setText(count + "s");
+                    handler.sendEmptyMessageDelayed(count,1000);
+                }
             }
 
+
+            //验证成功
             if(msg.what == 1001){
+                //验证码验证成功
                 miniLoadingDialog.dismiss();
 
                 //Intent intent = new Intent(CheckActivity.this,HomeActivity.class);
@@ -82,11 +93,15 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //开始60s倒计时
         handler.sendEmptyMessage(count);
     }
 
     @Override
     public void init() {
+
+        //获取加载view
         miniLoadingDialog = WidgetUtils.getMiniLoadingDialog(this);
         miniLoadingDialog.setDialogSize(200,200);
 
@@ -107,6 +122,7 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initData() {
+        //获取穿过来的电话
         Intent intent = getIntent();
         phoneNum = intent.getStringExtra("phoneNum");
         tvPhone.setText(phoneNum);
@@ -114,17 +130,23 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initEvent() {
+
+        //监听验证码的输入
         etCode.setOnInputListener(new VerifyCodeEditText.OnInputListener() {
+
+            //输入完成
             @Override
             public void onComplete(String input) {
                 checkPhoneCode(input);
             }
 
+            //修改输入
             @Override
             public void onChange(String input) {
 
             }
 
+            //清除输入
             @Override
             public void onClear() {
 
@@ -132,13 +154,19 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    /**
+     * 根据输入的验证码检查验证码是否正确
+     * @param code c验证码
+     */
     private void checkPhoneCode(String code){
         miniLoadingDialog.show();
 
+        //检查验证码是否正确
         LoginIn loginIn = new LoginIn();
         loginIn.checkPhoneCode(phoneNum, code, new LoginIn.LoginInCallback() {
             @Override
             public void done(String id) {
+                //正确
                 putUserId(id);
             }
 
@@ -152,11 +180,18 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+
+    /**
+     *验证码正确，返回bmob的一条数据的id，并保存在本地
+     * @param id  id
+     */
     private void putUserId(String id){
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putString("id",id);
         edit.commit();
+
+        //发送验证成功消息
         handler.sendEmptyMessageDelayed(1001,500);
     }
 
@@ -176,6 +211,7 @@ public class CheckActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void sendCode() {
+        isSend = true;
         BBManager.getInstance().sendCode(phoneNum, new QueryListener<Integer>() {
             @Override
             public void done(Integer integer, BmobException e) {

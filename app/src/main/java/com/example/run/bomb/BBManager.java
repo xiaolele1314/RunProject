@@ -1,6 +1,7 @@
 package com.example.run.bomb;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -22,6 +23,15 @@ public class BBManager {
         return mBBmanager;
     }
 
+    /**
+     * 通过id，查询用户
+     * @param id       id
+     * @param listener 结果回调
+     */
+    public void findUser(String id,QueryListener<MyUser>listener){
+        BmobQuery<MyUser> query = new BmobQuery<>();
+        query.getObject(id,listener);
+    }
 
     /**
      * 发送验证码

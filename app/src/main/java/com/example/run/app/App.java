@@ -29,6 +29,7 @@ public class App extends Application {
         //设置坐标类型
         SDKInitializer.setCoordType(CoordType.BD09LL);
 
+        //兼容低版本apk因过多函数导致错误
         MultiDex.install(this);
     }
 }

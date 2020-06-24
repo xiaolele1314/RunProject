@@ -79,6 +79,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * 获取输入电话，发送验证码
+     */
     private void sendPhoneNum(){
         phoneNum = etPhone.getText().toString();
         if(phoneNum.length() != 11){
@@ -86,10 +89,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
 
+        //监听发送验证码
         BBManager.getInstance().sendCode(phoneNum, new QueryListener<Integer>() {
             @Override
             public void done(Integer integer, BmobException e) {
                 if(e == null){
+                    //发送成功，跳转输入验证码界面，将电话号码作为参数传入
                     intent.setClass(LoginActivity.this,CheckActivity.class);
                     intent.putExtra("phoneNum",phoneNum);
                     startActivityForResult(intent,1);
@@ -104,6 +109,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == RESULT_OK){
+
+            //输入验证码成功，跳转home页面
             intent.setClass(LoginActivity.this,HomeActivity.class);
             startActivity(intent);
             finish();

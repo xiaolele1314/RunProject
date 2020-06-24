@@ -18,6 +18,12 @@ public class LoginIn {
     private LoginInCallback mLoginInCallback;
     private String phone;
 
+    /**
+     * 检查验证码
+     * @param phone 电话
+     * @param code 验证码
+     * @param callback 结果回调
+     */
     public void checkPhoneCode(String phone, final String code, LoginInCallback callback){
         this.mLoginInCallback = callback;
         this.phone = phone;
@@ -33,6 +39,9 @@ public class LoginIn {
         });
     }
 
+    /**
+     * 通过电话查找用户
+     */
     private void findUserByPhone(){
         BmobQuery<MyUser> query = new BmobQuery<>();
         query.addWhereEqualTo("phone",phone);
@@ -41,10 +50,12 @@ public class LoginIn {
             public void done(List<MyUser> list, BmobException e) {
                 if(e == null){
                     if(list.size() > 0){
+                        //有此用户保存到内存
                         MyUser myUser = list.get(0);
                         UserManage.getInstance().saveUser(myUser);
                         mLoginInCallback.done(UserManage.getInstance().getUser().getObjectId());
                     }else{
+                        //没有则创建用户
                         createUser();
                     }
                 }else{
@@ -54,6 +65,9 @@ public class LoginIn {
         });
     }
 
+    /**
+     * 在bmob创建用户
+     */
     private void createUser(){
         final MyUser user = new MyUser.Buidler()
                 .setName("小乐乐")
@@ -77,6 +91,9 @@ public class LoginIn {
         });
     }
 
+    /**
+     * 回调接口
+     */
     public interface LoginInCallback{
         void done(String id);
         void error(String msg,int errorCode);

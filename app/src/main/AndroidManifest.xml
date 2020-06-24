@@ -35,7 +35,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme1">
+        android:theme="@style/AppTheme_me">
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -48,15 +48,17 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.CheckActivity"></activity>
         <activity android:name=".activity.HomeActivity"></activity>
+        <activity android:name=".activity.TakeActivity"></activity>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
