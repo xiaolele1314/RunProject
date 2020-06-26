@@ -6,15 +6,15 @@
 
         <variable
             name="takeAddress"
-            type="com.bidemo.demo.room.Address" />
+            type="com.example.run.room.Address" />
 
         <variable
             name="collectAddress"
-            type="com.bidemo.demo.room.Address" />
+            type="com.example.run.room.Address" />
 
         <variable
             name="TakeActivity"
-            type="com.bidemo.demo.activity.TakeActivity" />
+            type="com.example.run.activity.TakeActivity" />
 
         <variable
             name="str"

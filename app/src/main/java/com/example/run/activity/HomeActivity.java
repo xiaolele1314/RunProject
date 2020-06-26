@@ -1,13 +1,16 @@
 package com.example.run.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +19,7 @@ import com.example.run.R;
 import com.example.run.adapter.HomeBannerAdapter;
 import com.example.run.bomb.MyUser;
 import com.example.run.manager.UserManage;
+import com.example.run.utils.Permission;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.xuexiang.xui.widget.banner.recycler.BannerLayout;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
@@ -57,6 +61,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         init();
         initView();
         initData();
+        initEvent();
     }
 
     @Override
@@ -90,6 +95,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         tvUp.setOnClickListener(this);
         linTake.setOnClickListener(this);
         ivClose.setOnClickListener(this);
+
     }
 
     @Override
@@ -108,7 +114,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initEvent() {
-
+        Permission permission = new Permission();
+        permission.checkPermission(this);
     }
 
     @Override
@@ -130,6 +137,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 1000){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.e("HomeActivity","权限请求成功");
+            }
         }
     }
 }

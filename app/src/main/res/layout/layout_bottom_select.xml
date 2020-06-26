@@ -6,7 +6,7 @@
     <data>
         <variable
             name="SelectActivity"
-            type="com.bidemo.demo.activity.SelectActivity" />
+            type="com.example.run.activity.SelectActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,7 +6,7 @@
 
         <variable
             name="SelectActivity"
-            type="com.bidemo.demo.activity.SelectActivity" />
+            type="com.example.run.activity.SelectActivity" />
 
     </data>
 
@@ -79,10 +79,9 @@
                         android:id="@+id/iv_close_select"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{()->SelectActivity.gong()}"
+                        android:onClick="@{()->SelectActivity.gone()}"
                         android:padding="10dp"
-                        android:src="@drawable/ic_close_24dp"
-                        android:visibility="gone" />
+                        android:src="@drawable/ic_close_24dp" />
                 </LinearLayout>
 
 
@@ -167,15 +166,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nes_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/bottom_sheet_behavior">
-            <include
-                android:id="@+id/include"
-                layout="@layout/layout_bottom_select"/>
-        </androidx.core.widget.NestedScrollView>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

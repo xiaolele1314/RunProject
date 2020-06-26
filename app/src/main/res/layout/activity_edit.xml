@@ -5,7 +5,7 @@
     <data>
         <variable
             name="EditActivity"
-            type="com.bidemo.demo.activity.EditActivity" />
+            type="com.example.run.activity.EditActivity" />
 
     </data>
 
