@@ -15,7 +15,7 @@ public abstract  class AddressDataBase extends RoomDatabase {
     private static AddressDataBase addressDataBase;
 
     public static AddressDataBase getInstance(Context context){
-        if(addressDataBase != null){
+        if(addressDataBase == null){
             addressDataBase = Room.databaseBuilder(context.getApplicationContext(),AddressDataBase.class,"address")
                     .build();
         }

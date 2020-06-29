@@ -15,5 +15,5 @@ public interface AddressDao {
     @Delete
     void deleteAddress(Address... addresses);
     @Query("SELECT * FROM Address ORDER BY ID DESC")
-    LiveData<List<Address>> getAllAddress(Address... addresses);
+    LiveData<List<Address>> getAllAddress();
 }

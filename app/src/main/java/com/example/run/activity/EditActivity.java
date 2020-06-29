@@ -29,6 +29,8 @@ public class EditActivity extends BaseActivity {
     private String sex = "女士";
     private LatLng latLng;
 
+    private int TYPE;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +41,14 @@ public class EditActivity extends BaseActivity {
         initEvent();
     }
 
+    /**
+     * 监听发给EditActivity界面的信息
+     */
     @Override
     public void init() {
         LiveDataBus.get().with("EditActivity").observerSticky(this, new EditActivityObserver(),true);
+
+        TYPE = getIntent().getIntExtra("type",0);
     }
 
     @Override
@@ -59,6 +66,7 @@ public class EditActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        //选择先生
         binding.boxManEdit.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
@@ -69,6 +77,7 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+        //选择女士
         binding.boxMissEdit.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
@@ -80,8 +89,13 @@ public class EditActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 点击activity_edit界面的的选择地址view调用此方法
+     * 把从EditActivity界面传来的type传给SelecActivity
+     */
     public void startActivity(){
         intent.setClass(this,SelectActivity.class);
+        intent.putExtra("type",TYPE);
         startActivity(intent);
     }
 
@@ -105,7 +119,8 @@ public class EditActivity extends BaseActivity {
 
         Address address = new Address();
 
-        address.setType(1);
+        //设置type区分adress信息,type来自TakeActivity
+        address.setType(TYPE);
         address.setAddress(binding.etAddressEdit.getText().toString());
         address.setName(binding.etNameEdit.getText().toString());
         address.setPhone(binding.etPhoneEdit.getText().toString());
@@ -113,11 +128,16 @@ public class EditActivity extends BaseActivity {
         address.setLatitude(latLng.latitude);
         address.setLongitude(latLng.longitude);
 
+        //向TakeActivity发送adress数据
         LiveDataBus.get().with("TakeActivity").setStickyData(address);
         finish();
 
     }
 
+
+    /**
+     * 具体实现监听接口
+     */
     private class EditActivityObserver implements Observer<HashMap>{
 
         @Override

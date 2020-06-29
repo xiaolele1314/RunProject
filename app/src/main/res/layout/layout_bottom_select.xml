@@ -93,7 +93,8 @@
                     android:padding="5dp"
                     android:textColor="@color/text_main"
                     android:textColorHint="@color/text_main"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:maxLines="1"/>
             </LinearLayout>
 
             <View
