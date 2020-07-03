@@ -1,15 +1,29 @@
 package com.example.run.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolygonOptions;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.utils.DistanceUtil;
+import com.example.run.Money;
 import com.example.run.java.LiveDataBus;
+import com.example.run.manager.UserManage;
 import com.example.run.room.Address;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -27,6 +41,16 @@ import com.example.run.databinding.ActivityTakeBinding;
 import com.example.run.manager.BDMap;
 import com.example.run.manager.BDmanager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.xuexiang.xui.widget.picker.XSeekBar;
+import com.xuexiang.xui.widget.toast.XToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TakeActivity extends BaseActivity {
 
@@ -45,6 +69,7 @@ public class TakeActivity extends BaseActivity {
     private BottomSheetBehavior<View> behavior;
 
     private Intent intent;
+
 
 
     @Override
@@ -76,6 +101,7 @@ public class TakeActivity extends BaseActivity {
     @Override
     public void initView() {
         baiduMap = binding.mapView.getMap();
+        baiduMap.setMyLocationEnabled(true);
         map = new BDMap(this);
         map.location(0,baiduMap);
         map.start();
@@ -121,18 +147,132 @@ public class TakeActivity extends BaseActivity {
             intent.putExtra("type",type);
             startActivity(intent);
         }else if(type == 2){
+            if(TextUtils.isEmpty(binding.include.tvTakeAddress.getText()))
+            {
+                XToast.warning(this,"先填写取件地址").show();
+                return;
+            }
             intent.setClass(this,AddressActivity.class);
             intent.putExtra("type",type);
             startActivity(intent);
+        }else if(type == 3){
+            intent.setClass(this,RemarksActivity.class);
+            startActivityForResult(intent,1001);
         }
     }
 
     public void showBottomDialog(){
+        if(TextUtils.isEmpty(binding.include.tvCollectAddress.getText())){
+            XToast.warning(this,"填写地址信息").show();
+            return;
+        }
 
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.layout_bottom_dialog_take);
+
+
+        TextView tvComplete = bottomSheetDialog.findViewById(R.id.tv_complete);
+        XSeekBar seekBar = bottomSheetDialog.findViewById(R.id.seekBar);
+
+        seekBar.setDefaultValue(5);
+        seekBar.setOnSeekBarListener(new XSeekBar.OnSeekBarListener() {
+            @Override
+            public void onValueChanged(XSeekBar seekBar, int newValue) {
+                weight = newValue;
+            }
+        });
+
+        tvComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.include.tvWeight.setText(weight + "KG");
+                money = Double.valueOf(Money.money(dist, weight));
+                binding.include.tvMoneyTake.setText(Money.money(dist,weight));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
     }
 
     public void commit(){
+        if (TextUtils.isEmpty(binding.include.tvTakeAddress.getText())||TextUtils.isEmpty(binding.include.tvCollectAddress.getText())){
+            XToast.warning(this,"完善地址信息").show();
+            return;
+        }else if (TextUtils.isEmpty(binding.include.tvWeight.getText())){
+            XToast.warning(this,"完善物品信息").show();
+            return;
+        }
 
+        JSONObject json = new JSONObject();
+
+        try {
+            //json.put("userId",UserManager.get().getUser().getObjectId());
+            json.put("userId", UserManage.getInstance().getUser().getObjectId());
+            json.put("takeAddress",binding.include.tvTakeAddress.getText().toString());
+            json.put("takeName",binding.include.tvTakeName.getText().toString());
+            json.put("takePhone",binding.include.tvTakePhone.getText().toString());
+            json.put("takeLatitude",takeLL.latitude);
+            json.put("takeLongitude",takeLL.longitude);
+
+            json.put("collectAddress",binding.include.tvCollectAddress.getText().toString());
+            json.put("collectName",binding.include.tvCollectName.getText().toString());
+            json.put("collectPhone",binding.include.tvCollectPhone.getText().toString());
+            json.put("collectLatitude",collectLL.latitude);
+            json.put("collectLongitude",collectLL.longitude);
+
+            json.put("money",money);
+            json.put("dist",dist);
+            json.put("weight",weight);
+            json.put("remarks",binding.include.tvInfoTake.getText().toString());
+            json.put("runType",1);
+            json.put("riderId","null");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        LiveDataBus.get().with("PayActivity").setStickyData(json);
+        intent.setClass(this,PayActivity.class);
+        startActivity(intent);
+    }
+
+    private void overLayMap(){
+        List<LatLng> latLngList = new ArrayList<>();
+        latLngList.add(takeLL);
+        latLngList.add(collectLL);
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.gps);
+        OverlayOptions takeOptions = new MarkerOptions()
+                .position(takeLL)
+                .draggable(false)
+                .animateType(MarkerOptions.MarkerAnimateType.drop)
+                .icon(icon);
+
+        OverlayOptions collectOptions = new MarkerOptions()
+                .position(collectLL)
+                .draggable(false)
+                .animateType(MarkerOptions.MarkerAnimateType.drop)
+                .icon(icon);
+
+        OverlayOptions lineOptions = new PolylineOptions()
+                .width(10)
+                .color(ActivityCompat.getColor(this,R.color.main_blue))
+                .points(latLngList);
+
+        baiduMap.addOverlay(takeOptions);
+        baiduMap.addOverlay(collectOptions);
+        baiduMap.addOverlay(lineOptions);
+
+        MapStatusUpdate update = MapStatusUpdateFactory.zoomTo(16f);
+        baiduMap.setMapStatus(update);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1001 && resultCode == RESULT_OK){
+            binding.include.tvInfoTake.setText(data.getStringExtra("content"));
+        }
     }
 
     @Override
@@ -165,9 +305,22 @@ public class TakeActivity extends BaseActivity {
             if(address.getType() == 1){
                 //属于用户自己信息
                 binding.include.setTakeAddress(address);
+                takeLL = new LatLng(address.getLatitude(),address.getLongitude());
             }else{
                 //属于对方信息
                 binding.include.setCollectAddress(address);
+                collectLL = new LatLng(address.getLatitude(),address.getLongitude());
+
+                double distance = DistanceUtil.getDistance(takeLL, collectLL);
+                dist = Double.valueOf(map.dist(distance));
+                binding.include.tvDistTake.setText(dist + "米");
+
+                //绘制地图
+                overLayMap();
+
+                if(behavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
             }
         }
     }

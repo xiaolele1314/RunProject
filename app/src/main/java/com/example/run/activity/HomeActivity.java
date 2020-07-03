@@ -38,6 +38,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private BannerLayout bannerLayout;
     private TextView tvUp;
 
+    private TextView tvAddress;
+    private TextView tvOrder;
+
     //底部选单
     private View bottomSheet;
     private BottomSheetBehavior<View> behavior;
@@ -51,6 +54,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private List<Integer> list;
 
     private Intent intent;
+
+    private int TYPE = 1;
+
 
 
     @Override
@@ -73,11 +79,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void initView() {
         tvNickName = findViewById(R.id.tv_nickName_home);
-        tvId = findViewById(R.id.tv_money_home);
+        tvId = findViewById(R.id.tv_id_home);
         tvMoney = findViewById(R.id.tv_money_home);
         tvUp = findViewById(R.id.tv_up_home);
         ivPhoto = findViewById(R.id.iv_photo_home);
         bannerLayout = findViewById(R.id.banner_home);
+
+        tvAddress = findViewById(R.id.tv_address_home);
+        tvOrder = findViewById(R.id.tv_order_home);
 
         //获取behavior
         bottomSheet = findViewById(R.id.nes_home);
@@ -95,6 +104,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         tvUp.setOnClickListener(this);
         linTake.setOnClickListener(this);
         ivClose.setOnClickListener(this);
+        tvAddress.setOnClickListener(this);
+        tvOrder.setOnClickListener(this);
 
     }
 
@@ -102,7 +113,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void initData() {
         MyUser user = UserManage.getInstance().getUser();
         tvNickName.setText(user.getName());
-        tvMoney.setText(String.valueOf(user.getMoney()));
+        tvMoney.setText(String.valueOf(Math.round(user.getMoney())));
+        tvId.setText(user.getObjectId());
 
         //为bannerLayout的RecyclerView设置适配器
         list.add(R.drawable.ima_51);
@@ -134,6 +146,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.lin_take_home:
                 //跳转地图信息界面
                 intent.setClass(HomeActivity.this,TakeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_address_home:
+                intent.setClass(this,AddressActivity.class);
+                intent.putExtra("type",TYPE);
+                startActivity(intent);
+                break;
+            case R.id.tv_order_home:
+                intent.setClass(this,OrderActivity.class);
                 startActivity(intent);
                 break;
 

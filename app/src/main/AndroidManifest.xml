@@ -33,7 +33,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme_me">
 
@@ -48,20 +48,24 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".activity.StartActivity"></activity>
-        <activity android:name=".activity.LoginActivity"></activity>
-        <activity android:name=".activity.CheckActivity"></activity>
-        <activity android:name=".activity.HomeActivity"></activity>
-        <activity android:name=".activity.TakeActivity">
+        <activity android:name=".activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.CheckActivity"></activity>
+        <activity android:name=".activity.HomeActivity"></activity>
+        <activity android:name=".activity.TakeActivity"></activity>
         <activity android:name=".activity.SelectActivity"></activity>
         <activity android:name=".activity.EditActivity"></activity>
         <activity android:name=".activity.AddressActivity"></activity>
+        <activity android:name=".activity.RemarksActivity"></activity>
+        <activity android:name=".activity.PayActivity"></activity>
+        <activity android:name=".activity.OrderActivity"></activity>
+        <activity android:name=".activity.AddressItemActivity"></activity>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"

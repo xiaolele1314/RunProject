@@ -3,6 +3,7 @@ package com.example.run.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,11 +25,13 @@ public class AddressActivity extends BaseActivity {
 
     private TextView tvAdd;
     private RecyclerView recyclerView;
+    private ImageView ivClose;
 
     private AddressRecAdapter adapter;
     private AddressManager manager;
 
     private int TYPE  = 2;
+    private int type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +51,21 @@ public class AddressActivity extends BaseActivity {
     @Override
     public void init() {
         manager = new AddressManager(this);
+        type = getIntent().getIntExtra("type",0);
     }
 
     @Override
     public void initView() {
         tvAdd = findViewById(R.id.tv_add_address);
         recyclerView = findViewById(R.id.rec_address);
+        ivClose = findViewById(R.id.iv_close_address);
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -93,8 +105,18 @@ public class AddressActivity extends BaseActivity {
         adapter.setOnClickListener(new AddressRecAdapter.OnItemClickListener() {
             @Override
             public void onClick(Address address) {
-                LiveDataBus.get().with("TakeActivity").setStickyData(address);
-                finish();
+                type = 1;
+                if(type == 1){
+                    Intent intent = new Intent(AddressActivity.this,AddressItemActivity.class);
+                    intent.putExtra("addName",address.getAddress());
+                    intent.putExtra("latitude",address.getLatitude());
+                    intent.putExtra("longtitude",address.getLongitude());
+                    startActivity(intent);
+                }else if(type == 2){
+                    LiveDataBus.get().with("TakeActivity").setStickyData(address);
+                    finish();
+                }
+
             }
         });
     }

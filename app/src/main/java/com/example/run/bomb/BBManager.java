@@ -1,8 +1,11 @@
 package com.example.run.bomb;
 
+import com.example.run.model.Take;
+
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -50,5 +53,17 @@ public class BBManager {
      */
     public void checkPhoneCode(String phone, String code, UpdateListener listener){
         BmobSMS.verifySmsCode(phone,code,listener);
+    }
+
+    /**
+     * 获取当前用户取送订单
+     *
+     * @param userId  用户id
+     * @param listener 结果回调
+     */
+    public void findTakeOrder(String userId, FindListener<Take> listener){
+        BmobQuery<Take> query = new BmobQuery<>();
+        query.addWhereEqualTo("userId",userId);
+        query.findObjects(listener);
     }
 }

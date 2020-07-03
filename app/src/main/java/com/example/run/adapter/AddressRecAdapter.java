@@ -17,6 +17,7 @@ import java.util.List;
 
 public class AddressRecAdapter extends RecyclerView.Adapter<AddressRecAdapter.ViewHolder> {
 
+
     private List<Address> list;
     private OnItemClickListener onClickListener;
 

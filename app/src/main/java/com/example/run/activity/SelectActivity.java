@@ -53,7 +53,7 @@ public class SelectActivity extends BaseActivity {
 
     private InputMethodManager inputMethodManager;
 
-    private String address;
+    private String getAddress;
 
     private View bottomSheet;
     private BottomSheetBehavior<View> behavior;
@@ -69,8 +69,8 @@ public class SelectActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         init();
-        initData();
         initView();
+        initData();
         initEvent();
 
 
@@ -119,7 +119,7 @@ public class SelectActivity extends BaseActivity {
      */
     @Override
     public void initData() {
-        baiduMap = binding.mapView.getMap();
+        //baiduMap = binding.mapView.getMap();
         bdMap = new BDMap(this);
         bdMap.location(0,baiduMap);
         bdMap.start();
@@ -224,8 +224,8 @@ public class SelectActivity extends BaseActivity {
                     Log.e("SelectActivity","没有地址");
                 }else{
                     //获取移动后的地址并显示
-                    address = reverseGeoCodeResult.getAddress();
-                    binding.tvAddressSelect.setText(address);
+                    getAddress = reverseGeoCodeResult.getAddress();
+                    binding.tvAddressSelect.setText(getAddress);
                 }
             }
         });
@@ -308,7 +308,7 @@ public class SelectActivity extends BaseActivity {
 
         Address address = new Address();
         address.setType(type);
-        address.setAddress(binding.include.etAddressBottomSelect.getText().toString());
+        address.setAddress(getAddress + binding.include.etAddressBottomSelect.getText().toString());
         address.setName(binding.include.etNameBottomSelect.getText().toString());
         address.setPhone(binding.include.etPhoneBottomSelect.getText().toString());
         address.setSex(binding.include.boxManBottomSelect.isChecked()?"先生":"女士");
@@ -327,7 +327,7 @@ public class SelectActivity extends BaseActivity {
     public void complete(){
         if(type == 1){
             HashMap hashMap = new HashMap();
-            hashMap.put("address",address);
+            hashMap.put("address",getAddress);
             hashMap.put("latlng",latLng);
 
             //向EditActivity发送经纬度信息和address数据
@@ -337,7 +337,7 @@ public class SelectActivity extends BaseActivity {
             //展开底部选框，默认是女士
             if(behavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                binding.include.tvAddressBottomSelect.setText(address);
+                binding.include.tvAddressBottomSelect.setText(getAddress);
                 binding.include.boxMissBottomSelect.setChecked(true);
             }
         }

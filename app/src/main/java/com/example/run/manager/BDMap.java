@@ -19,6 +19,7 @@ public class BDMap {
     private LocationClient mLocationClient;
     private BaiduMap baiduMap;
 
+
     public BDMap(Context context){
         this.context = context;
     }
@@ -48,12 +49,25 @@ public class BDMap {
             public void onReceiveLocation(BDLocation bdLocation) {
                 LatLng latLng = new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude());
                 MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLng(latLng);
-                MapStatusUpdate mapStatusUpdate1 = MapStatusUpdateFactory.zoomTo(18f);
+                MapStatusUpdate mapStatusUpdate1 = MapStatusUpdateFactory.zoomTo(14f);
                 baiduMap.setMapStatus(mapStatusUpdate);
                 baiduMap.animateMapStatus(mapStatusUpdate1);
                 stop();
             }
         });
+    }
+
+    public void setNewLoc(double latitude, double longtitude, BaiduMap baiduMap, Context context){
+        this.baiduMap = baiduMap;
+        baiduMap.setMyLocationEnabled(true);
+        mLocationClient = new LocationClient(context);
+
+        LatLng latLng = new LatLng(latitude,longtitude);
+        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLng(latLng);
+        MapStatusUpdate mapStatusUpdate1 = MapStatusUpdateFactory.zoomTo(14f);
+        baiduMap.setMapStatus(mapStatusUpdate);
+        baiduMap.animateMapStatus(mapStatusUpdate1);
+        stop();
     }
 
     public void start(){

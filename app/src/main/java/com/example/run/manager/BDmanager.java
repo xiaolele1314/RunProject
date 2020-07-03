@@ -84,7 +84,7 @@ public class BDmanager {
     }
 
     public void startPoi(String key){
-        suggestionSearch.requestSuggestion(suggestionSearchOption.citylimit(true).city("山西").keyword(key));
+        suggestionSearch.requestSuggestion(suggestionSearchOption.citylimit(false).city("山西").keyword(key));
 
     }
 
