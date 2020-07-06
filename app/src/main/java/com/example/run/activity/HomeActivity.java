@@ -37,6 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private RadiusImageView ivPhoto;
     private BannerLayout bannerLayout;
     private TextView tvUp;
+    private TextView tvPersonMsg;
 
     private TextView tvAddress;
     private TextView tvOrder;
@@ -84,6 +85,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         tvUp = findViewById(R.id.tv_up_home);
         ivPhoto = findViewById(R.id.iv_photo_home);
         bannerLayout = findViewById(R.id.banner_home);
+        tvPersonMsg = findViewById(R.id.tv_person_msg);
 
         tvAddress = findViewById(R.id.tv_address_home);
         tvOrder = findViewById(R.id.tv_order_home);
@@ -106,6 +108,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ivClose.setOnClickListener(this);
         tvAddress.setOnClickListener(this);
         tvOrder.setOnClickListener(this);
+        tvPersonMsg.setOnClickListener(this);
 
     }
 
@@ -157,6 +160,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 intent.setClass(this,OrderActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.tv_person_msg:
+                intent.setClass(this,PersonMsgActivity.class);
+                startActivity(intent);
 
         }
     }

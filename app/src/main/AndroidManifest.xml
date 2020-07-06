@@ -49,11 +49,7 @@
         </service>
 
         <activity android:name=".activity.StartActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.CheckActivity"></activity>
@@ -66,12 +62,28 @@
         <activity android:name=".activity.PayActivity"></activity>
         <activity android:name=".activity.OrderActivity"></activity>
         <activity android:name=".activity.AddressItemActivity"></activity>
+        <activity android:name=".activity.PersonMsgActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.example.run.BmobContentProvider">
         </provider>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.run.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
 
     </application>

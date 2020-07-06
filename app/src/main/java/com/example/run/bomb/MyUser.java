@@ -10,6 +10,7 @@ public class MyUser extends BmobObject {
     private String photoUrl;
     private String payPwd;
 
+    private byte[] portrait;
     private Double money;
     private Double upMoney;
 
@@ -35,6 +36,14 @@ public class MyUser extends BmobObject {
 
     public Double getUpMoney() {
         return upMoney;
+    }
+
+    public byte[] getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(byte[] portrait) {
+        this.portrait = portrait;
     }
 
     public void setName(String name) {
@@ -67,6 +76,7 @@ public class MyUser extends BmobObject {
         private String photoUrl;
         private String payPwd;
 
+        private byte[] portrait;
         private Double money;
         private Double upMoney;
 
@@ -100,6 +110,10 @@ public class MyUser extends BmobObject {
             return this;
         }
 
+        public void setPortrait(byte[] portrait) {
+            this.portrait = portrait;
+        }
+
         public MyUser build(){
             MyUser myUser = new MyUser();
 
@@ -109,6 +123,7 @@ public class MyUser extends BmobObject {
             myUser.setMoney(money);
             myUser.setPayPwd(payPwd);
             myUser.setUpMoney(upMoney);
+            myUser.setPortrait(portrait);
 
             return myUser;
         }

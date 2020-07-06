@@ -56,12 +56,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_person_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/shape_whole_white_10dp"
                 android:drawableEnd="@drawable/ic_right_main1_16dp"
+                android:clickable="true"
                 android:gravity="center"
                 android:padding="2dp"
                 android:text=" 个人信息 "

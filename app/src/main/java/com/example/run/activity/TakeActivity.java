@@ -235,6 +235,7 @@ public class TakeActivity extends BaseActivity {
         LiveDataBus.get().with("PayActivity").setStickyData(json);
         intent.setClass(this,PayActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void overLayMap(){
